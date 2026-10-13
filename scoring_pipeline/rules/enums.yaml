@@ -1,0 +1,132 @@
+# Valid8 Pro Enum Definitions
+# Version: 1.0.0
+#
+# Master list of all valid enum values for extraction and validation.
+# Update this file when adding new categories.
+
+version: "1.0.0"
+
+# Industry verticals
+industry_vertical:
+  - fintech
+  - healthtech
+  - edtech
+  - e_commerce
+  - enterprise_sw
+  - consumer_app
+  - hardware
+  - deeptech
+  - climate
+  - proptech
+  - legaltech
+  - hrtech
+  - martech
+  - logistics
+  - gaming
+  - media
+  - social
+  - ai_ml
+  - cybersecurity
+  - other
+
+# Business models
+business_model:
+  - B2B
+  - B2C
+  - B2B2C
+  - marketplace
+  - SaaS
+  - subscription
+  - transactional
+  - freemium
+  - advertising
+  - licensing
+  - hybrid
+
+# Geographic scope
+target_geography:
+  - local
+  - regional
+  - national
+  - multi_national
+  - global
+
+# Customer segments
+customer_segment:
+  - consumer
+  - prosumer
+  - SMB
+  - mid_market
+  - enterprise
+  - government
+
+# Development stages
+development_stage:
+  - concept
+  - prototype
+  - MVP
+  - early_traction
+  - growth
+  - scale
+
+# Team sizes
+team_size:
+  - solo
+  - "2-5"
+  - "6-20"
+  - "21-50"
+  - "50+"
+
+# Funding stages
+funding_stage:
+  - pre_seed
+  - seed
+  - series_a
+  - series_b_plus
+  - bootstrapped
+  - grant_funded
+
+# Source types
+source_type:
+  - pitch_deck
+  - business_plan
+  - interview_transcript
+  - website
+  - form_input
+  - video_transcript
+  - other
+
+# Extraction confidence levels
+extraction_confidence:
+  - high
+  - medium
+  - low
+
+# Validation statuses
+validation_status:
+  - passed
+  - failed
+  - warnings
+
+# Check statuses
+check_status:
+  - pass
+  - fail
+  - warn
+  - skip
+
+# Score grades
+grade:
+  - Exceptional
+  - Strong
+  - Moderate
+  - Weak
+  - Critical
+
+# Persona names
+persona:
+  - ruthless_vc
+  - indie_hacker
+  - mom_test_coach
+  - tech_advisor
+  - silicon_valley_satirist

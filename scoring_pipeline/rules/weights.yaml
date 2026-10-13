@@ -1,0 +1,75 @@
+# Valid8 Pro Dimension Weights
+# Version: 1.0.0
+#
+# These weights determine the relative importance of each scoring dimension
+# in the final weighted score calculation.
+#
+# IMPORTANT: Weights MUST sum to exactly 1.00
+
+version: "1.0.0"
+effective_date: "2025-12-06"
+
+# Dimension weights (must sum to 1.00)
+weights:
+  problem_clarity: 0.15
+  solution_feasibility: 0.15
+  market_size_potential: 0.20
+  competitive_landscape: 0.15
+  business_model_viability: 0.15
+  team_readiness: 0.10
+  data_completeness: 0.10
+
+# Verification (for validation)
+total_weight: 1.00
+
+# Weight rationale (for documentation)
+rationale:
+  problem_clarity: "Clear problem = product-market fit potential"
+  solution_feasibility: "Can this actually be built and delivered?"
+  market_size_potential: "Highest weight - market size caps upside"
+  competitive_landscape: "Differentiation determines defensibility"
+  business_model_viability: "Revenue model determines sustainability"
+  team_readiness: "Lower weight - teams can be built"
+  data_completeness: "Lower weight - quality indicator, not idea quality"
+
+# Alternative weight profiles (can be switched based on persona)
+profiles:
+  # Default balanced profile
+  balanced:
+    problem_clarity: 0.15
+    solution_feasibility: 0.15
+    market_size_potential: 0.20
+    competitive_landscape: 0.15
+    business_model_viability: 0.15
+    team_readiness: 0.10
+    data_completeness: 0.10
+  
+  # VC-focused (market size matters most)
+  vc_focused:
+    problem_clarity: 0.10
+    solution_feasibility: 0.10
+    market_size_potential: 0.30
+    competitive_landscape: 0.20
+    business_model_viability: 0.15
+    team_readiness: 0.10
+    data_completeness: 0.05
+  
+  # Indie hacker (feasibility and revenue matter most)
+  indie_focused:
+    problem_clarity: 0.20
+    solution_feasibility: 0.20
+    market_size_potential: 0.10
+    competitive_landscape: 0.15
+    business_model_viability: 0.25
+    team_readiness: 0.05
+    data_completeness: 0.05
+  
+  # Technical advisor (feasibility matters most)
+  technical_focused:
+    problem_clarity: 0.15
+    solution_feasibility: 0.30
+    market_size_potential: 0.15
+    competitive_landscape: 0.15
+    business_model_viability: 0.10
+    team_readiness: 0.10
+    data_completeness: 0.05

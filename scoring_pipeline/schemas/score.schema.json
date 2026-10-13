@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ScoreResult",
+  "description": "Schema for Layer 3 scoring output",
+  "type": "object",
+  "required": ["final_score", "grade", "dimension_scores", "calculation_trace", "rules_version"],
+  "properties": {
+    "final_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Weighted final score"
+    },
+    "grade": {
+      "type": "string",
+      "enum": ["Exceptional", "Strong", "Moderate", "Weak", "Critical"],
+      "description": "Human-readable grade"
+    },
+    "dimension_scores": {
+      "type": "object",
+      "required": [
+        "problem_clarity",
+        "solution_feasibility", 
+        "market_size_potential",
+        "competitive_landscape",
+        "business_model_viability",
+        "team_readiness",
+        "data_completeness"
+      ],
+      "properties": {
+        "problem_clarity": {
+          "$ref": "#/definitions/DimensionScore"
+        },
+        "solution_feasibility": {
+          "$ref": "#/definitions/DimensionScore"
+        },
+        "market_size_potential": {
+          "$ref": "#/definitions/DimensionScore"
+        },
+        "competitive_landscape": {
+          "$ref": "#/definitions/DimensionScore"
+        },
+        "business_model_viability": {
+          "$ref": "#/definitions/DimensionScore"
+        },
+        "team_readiness": {
+          "$ref": "#/definitions/DimensionScore"
+        },
+        "data_completeness": {
+          "$ref": "#/definitions/DimensionScore"
+        }
+      }
+    },
+    "calculation_trace": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/RuleApplication"
+      },
+      "description": "Complete audit trail of all rules evaluated"
+    },
+    "rules_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Version of scoring rules used"
+    },
+    "scored_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "scoring_metadata": {
+      "type": "object",
+      "properties": {
+        "rules_applied_count": {"type": "integer"},
+        "rules_triggered_count": {"type": "integer"},
+        "industry_multiplier_used": {"type": "number"},
+        "processing_time_ms": {"type": "integer"}
+      }
+    }
+  },
+  "definitions": {
+    "DimensionScore": {
+      "type": "object",
+      "required": ["score", "weight", "weighted_score"],
+      "properties": {
+        "score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "weighted_score": {
+          "type": "number"
+        },
+        "rules_triggered": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "RuleApplication": {
+      "type": "object",
+      "required": ["rule_id", "dimension", "applied", "points"],
+      "properties": {
+        "rule_id": {
+          "type": "string",
+          "description": "Unique rule identifier (e.g., PC-001)"
+        },
+        "dimension": {
+          "type": "string",
+          "description": "Which dimension this rule affects"
+        },
+        "applied": {
+          "type": "boolean",
+          "description": "Whether the rule condition was met"
+        },
+        "points": {
+          "type": "integer",
+          "description": "Points added (positive) or subtracted (negative)"
+        },
+        "condition": {
+          "type": "string",
+          "description": "Human-readable condition"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Why the rule did or didn't apply"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StartupIdeaExtraction",
+  "description": "Schema for Layer 1 LLM extraction output",
+  "type": "object",
+  "required": ["idea_core", "market_classification", "stage_indicators", "extraction_metadata"],
+  "properties": {
+    "idea_core": {
+      "type": "object",
+      "required": ["problem_statement", "solution_description", "target_customer", "value_proposition"],
+      "properties": {
+        "problem_statement": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "The problem being solved"
+        },
+        "solution_description": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "How the product/service solves the problem"
+        },
+        "target_customer": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Who is the primary customer"
+        },
+        "value_proposition": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Unique value offered to customers"
+        },
+        "competitors_mentioned": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Any competitors mentioned in the source"
+        },
+        "differentiation": {
+          "type": ["string", "null"],
+          "maxLength": 300,
+          "description": "How this differs from alternatives"
+        }
+      }
+    },
+    "market_classification": {
+      "type": "object",
+      "required": ["industry_vertical", "business_model", "target_geography", "customer_segment"],
+      "properties": {
+        "industry_vertical": {
+          "type": "string",
+          "enum": ["fintech", "healthtech", "edtech", "e_commerce", "enterprise_sw", "consumer_app", "hardware", "deeptech", "climate", "proptech", "legaltech", "hrtech", "martech", "logistics", "gaming", "media", "social", "ai_ml", "cybersecurity", "other"]
+        },
+        "business_model": {
+          "type": "string",
+          "enum": ["B2B", "B2C", "B2B2C", "marketplace", "SaaS", "subscription", "transactional", "freemium", "advertising", "licensing", "hybrid"]
+        },
+        "target_geography": {
+          "type": "string",
+          "enum": ["local", "regional", "national", "multi_national", "global"]
+        },
+        "customer_segment": {
+          "type": "string",
+          "enum": ["consumer", "prosumer", "SMB", "mid_market", "enterprise", "government"]
+        }
+      }
+    },
+    "stage_indicators": {
+      "type": "object",
+      "required": ["development_stage"],
+      "properties": {
+        "development_stage": {
+          "type": "string",
+          "enum": ["concept", "prototype", "MVP", "early_traction", "growth", "scale"]
+        },
+        "team_size": {
+          "type": ["string", "null"],
+          "enum": ["solo", "2-5", "6-20", "21-50", "50+", null]
+        },
+        "funding_stage": {
+          "type": ["string", "null"],
+          "enum": ["pre_seed", "seed", "series_a", "series_b_plus", "bootstrapped", "grant_funded", null]
+        },
+        "has_revenue": {
+          "type": ["boolean", "null"]
+        },
+        "has_users": {
+          "type": ["boolean", "null"]
+        }
+      }
+    },
+    "extraction_metadata": {
+      "type": "object",
+      "required": ["source_type", "extraction_confidence"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["pitch_deck", "business_plan", "interview_transcript", "website", "form_input", "video_transcript", "other"]
+        },
+        "extraction_confidence": {
+          "type": "string",
+          "enum": ["high", "medium", "low"]
+        },
+        "fields_extracted": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Fields directly extracted from source"
+        },
+        "fields_inferred": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Fields inferred/derived from context"
+        },
+        "extraction_notes": {
+          "type": ["string", "null"],
+          "description": "Any notes about extraction quality or ambiguity"
+        }
+      }
+    }
+  }
+}

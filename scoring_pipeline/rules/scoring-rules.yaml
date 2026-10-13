@@ -1,0 +1,395 @@
+# Valid8 Pro Scoring Rules
+# Version: 1.0.0
+# Last Updated: 2025-12-06
+# 
+# IMPORTANT: All scoring is deterministic. Same input = same output.
+# Base score for each dimension: 50 points
+# Final dimension score: max(0, min(100, base + sum(triggered_rules)))
+
+version: "1.0.0"
+effective_date: "2025-12-06"
+base_score: 50
+
+# =============================================================================
+# PROBLEM CLARITY SCORING (Weight: 15%)
+# =============================================================================
+problem_clarity:
+  description: "How clearly defined is the problem being solved"
+  rules:
+    - id: "PC-001"
+      condition: "problem_statement.length > 100"
+      points: 20
+      description: "Detailed problem description (>100 chars)"
+      
+    - id: "PC-002"
+      condition: "problem_statement contains numbers or metrics"
+      points: 25
+      description: "Quantifiable problem impact mentioned"
+      keywords: ["$", "%", "million", "billion", "hours", "days", "x", "times"]
+      
+    - id: "PC-003"
+      condition: "problem_statement mentions specific pain point"
+      points: 20
+      description: "Specific customer pain point identified"
+      keywords: ["pain", "struggle", "frustrat", "difficult", "expensive", "slow", "waste", "lose", "cost"]
+      
+    - id: "PC-004"
+      condition: "competitors_mentioned is not empty OR differentiation is not null"
+      points: 15
+      description: "Awareness of current alternatives shown"
+      
+    - id: "PC-005"
+      condition: "'problem_statement' in extraction_metadata.fields_extracted"
+      points: 10
+      description: "Problem was directly extracted (not inferred)"
+      
+    - id: "PC-006"
+      condition: "problem_statement.length < 50"
+      points: -10
+      description: "Problem description too brief (<50 chars)"
+      
+    - id: "PC-007"
+      condition: "problem_statement contains vague language"
+      points: -15
+      description: "Generic or vague problem description"
+      keywords: ["various", "many people", "some users", "generally", "often", "sometimes"]
+
+# =============================================================================
+# SOLUTION FEASIBILITY SCORING (Weight: 15%)
+# =============================================================================
+solution_feasibility:
+  description: "Technical and operational feasibility of the solution"
+  rules:
+    - id: "SF-001"
+      condition: "solution_description.length > 100"
+      points: 15
+      description: "Detailed solution description"
+      
+    - id: "SF-002"
+      condition: "solution_description mentions technology or method"
+      points: 20
+      description: "Clear technology or methodology mentioned"
+      keywords: ["AI", "ML", "API", "platform", "algorithm", "automation", "software", "app", "system"]
+      
+    - id: "SF-003"
+      condition: "development_stage in ['MVP', 'early_traction', 'growth', 'scale']"
+      points: 25
+      description: "Solution beyond concept stage"
+      
+    - id: "SF-004"
+      condition: "development_stage == 'prototype'"
+      points: 15
+      description: "Solution at prototype stage"
+      
+    - id: "SF-005"
+      condition: "development_stage == 'concept'"
+      points: 0
+      description: "Solution at concept stage only"
+      
+    - id: "SF-006"
+      condition: "has_users == true"
+      points: 20
+      description: "Solution has actual users"
+      
+    - id: "SF-007"
+      condition: "industry_vertical == 'deeptech' AND development_stage == 'concept'"
+      points: -15
+      description: "DeepTech at concept stage (high technical risk)"
+
+# =============================================================================
+# MARKET SIZE POTENTIAL SCORING (Weight: 20%)
+# =============================================================================
+market_size_potential:
+  description: "Addressable market size indicators"
+  rules:
+    - id: "MS-001"
+      condition: "target_geography == 'global'"
+      points: 30
+      description: "Global market target"
+      
+    - id: "MS-002"
+      condition: "target_geography == 'multi_national'"
+      points: 25
+      description: "Multi-national market target"
+      
+    - id: "MS-003"
+      condition: "target_geography == 'national'"
+      points: 15
+      description: "National market target"
+      
+    - id: "MS-004"
+      condition: "target_geography == 'regional'"
+      points: 8
+      description: "Regional market target"
+      
+    - id: "MS-005"
+      condition: "target_geography == 'local'"
+      points: 3
+      description: "Local market target"
+      
+    - id: "MS-006"
+      condition: "customer_segment == 'enterprise'"
+      points: 20
+      description: "Enterprise customer segment"
+      
+    - id: "MS-007"
+      condition: "customer_segment == 'mid_market'"
+      points: 15
+      description: "Mid-market customer segment"
+      
+    - id: "MS-008"
+      condition: "customer_segment == 'SMB'"
+      points: 12
+      description: "SMB customer segment"
+      
+    - id: "MS-009"
+      condition: "customer_segment == 'consumer' AND target_geography in ['global', 'multi_national']"
+      points: 18
+      description: "Consumer at scale"
+      
+    - id: "MS-010"
+      condition: "business_model in ['SaaS', 'marketplace']"
+      points: 15
+      description: "Scalable business model"
+
+# Industry multipliers (applied to market_size_potential after rules)
+industry_multipliers:
+  ai_ml: 1.25
+  fintech: 1.15
+  healthtech: 1.15
+  climate: 1.20
+  cybersecurity: 1.15
+  enterprise_sw: 1.10
+  deeptech: 1.10
+  edtech: 1.05
+  e_commerce: 1.00
+  proptech: 1.00
+  logistics: 1.00
+  hrtech: 1.00
+  martech: 0.95
+  consumer_app: 0.90
+  social: 0.85
+  gaming: 0.90
+  media: 0.90
+  hardware: 0.95
+  legaltech: 1.00
+  other: 1.00
+
+# =============================================================================
+# COMPETITIVE LANDSCAPE SCORING (Weight: 15%)
+# =============================================================================
+competitive_landscape:
+  description: "Market saturation and differentiation potential"
+  rules:
+    - id: "CL-001"
+      condition: "competitors_mentioned is not empty"
+      points: 20
+      description: "Specific competitors identified"
+      
+    - id: "CL-002"
+      condition: "differentiation is not null AND differentiation.length > 50"
+      points: 25
+      description: "Clear differentiation strategy described"
+      
+    - id: "CL-003"
+      condition: "industry_vertical in ['ai_ml', 'climate', 'deeptech']"
+      points: 15
+      description: "Industry with emerging opportunity"
+      
+    - id: "CL-004"
+      condition: "industry_vertical in ['e_commerce', 'social', 'consumer_app']"
+      points: -10
+      description: "Highly competitive/saturated industry"
+      
+    - id: "CL-005"
+      condition: "differentiation contains IP/tech keywords"
+      points: 20
+      description: "Unique technology or IP mentioned"
+      keywords: ["patent", "proprietary", "unique", "first", "only", "invented", "breakthrough"]
+      
+    - id: "CL-006"
+      condition: "competitors_mentioned is empty AND differentiation is null"
+      points: -20
+      description: "No competitive awareness shown"
+      
+    - id: "CL-007"
+      condition: "business_model == 'marketplace' AND customer_segment == 'consumer'"
+      points: -10
+      description: "Consumer marketplace (winner-take-all dynamics)"
+
+# =============================================================================
+# BUSINESS MODEL VIABILITY SCORING (Weight: 15%)
+# =============================================================================
+business_model_viability:
+  description: "Revenue model clarity and sustainability"
+  rules:
+    - id: "BM-001"
+      condition: "business_model in ['SaaS', 'subscription']"
+      points: 25
+      description: "Recurring revenue model"
+      
+    - id: "BM-002"
+      condition: "business_model == 'marketplace'"
+      points: 20
+      description: "Platform/marketplace model"
+      
+    - id: "BM-003"
+      condition: "business_model == 'B2B'"
+      points: 15
+      description: "B2B sales model"
+      
+    - id: "BM-004"
+      condition: "business_model == 'transactional'"
+      points: 10
+      description: "Transactional revenue model"
+      
+    - id: "BM-005"
+      condition: "business_model == 'advertising'"
+      points: 5
+      description: "Ad-supported model (requires scale)"
+      
+    - id: "BM-006"
+      condition: "business_model == 'freemium' AND customer_segment in ['consumer', 'prosumer']"
+      points: 8
+      description: "Freemium consumer model"
+      
+    - id: "BM-007"
+      condition: "has_revenue == true"
+      points: 25
+      description: "Already generating revenue"
+      
+    - id: "BM-008"
+      condition: "customer_segment == 'enterprise' AND business_model == 'B2B'"
+      points: 15
+      description: "Enterprise B2B (high contract values)"
+
+# =============================================================================
+# TEAM READINESS SCORING (Weight: 10%)
+# =============================================================================
+team_readiness:
+  description: "Team composition and stage alignment"
+  rules:
+    - id: "TR-001"
+      condition: "team_size in ['6-20', '21-50', '50+']"
+      points: 25
+      description: "Established team size"
+      
+    - id: "TR-002"
+      condition: "team_size == '2-5'"
+      points: 15
+      description: "Small team (typical early stage)"
+      
+    - id: "TR-003"
+      condition: "team_size == 'solo'"
+      points: 5
+      description: "Solo founder"
+      
+    - id: "TR-004"
+      condition: "team_size is null"
+      points: 0
+      description: "Team size not specified"
+      
+    - id: "TR-005"
+      condition: "funding_stage in ['series_a', 'series_b_plus']"
+      points: 25
+      description: "Institutional funding received"
+      
+    - id: "TR-006"
+      condition: "funding_stage == 'seed'"
+      points: 15
+      description: "Seed funding received"
+      
+    - id: "TR-007"
+      condition: "funding_stage == 'pre_seed'"
+      points: 8
+      description: "Pre-seed funding"
+      
+    - id: "TR-008"
+      condition: "funding_stage == 'bootstrapped' AND has_revenue == true"
+      points: 20
+      description: "Profitable bootstrap"
+      
+    - id: "TR-009"
+      condition: "development_stage in ['growth', 'scale'] AND team_size == 'solo'"
+      points: -15
+      description: "Growth stage with solo founder (scaling risk)"
+
+# =============================================================================
+# DATA COMPLETENESS SCORING (Weight: 10%)
+# =============================================================================
+data_completeness:
+  description: "Quality and completeness of provided information"
+  rules:
+    - id: "DC-001"
+      condition: "all required fields are non-null"
+      points: 30
+      description: "All required fields populated"
+      required_fields:
+        - "problem_statement"
+        - "solution_description"
+        - "target_customer"
+        - "value_proposition"
+        - "industry_vertical"
+        - "business_model"
+        - "target_geography"
+        - "customer_segment"
+        - "development_stage"
+      
+    - id: "DC-002"
+      condition: "extraction_confidence == 'high'"
+      points: 25
+      description: "High extraction confidence"
+      
+    - id: "DC-003"
+      condition: "extraction_confidence == 'medium'"
+      points: 12
+      description: "Medium extraction confidence"
+      
+    - id: "DC-004"
+      condition: "extraction_confidence == 'low'"
+      points: 3
+      description: "Low extraction confidence"
+      
+    - id: "DC-005"
+      condition: "source_type in ['pitch_deck', 'business_plan', 'interview_transcript']"
+      points: 15
+      description: "Rich source material"
+      
+    - id: "DC-006"
+      condition: "source_type == 'form_input'"
+      points: 8
+      description: "Form-based input"
+      
+    - id: "DC-007"
+      condition: "fields_inferred.length > 3"
+      points: -15
+      description: "Too many fields inferred (>3)"
+      
+    - id: "DC-008"
+      condition: "fields_inferred.length == 0"
+      points: 15
+      description: "No fields inferred (all extracted)"
+      
+    - id: "DC-009"
+      condition: "optional fields populated (team_size, funding_stage, has_revenue, has_users)"
+      points: 10
+      description: "Optional context provided"
+      calculation: "2.5 points per optional field that is not null"
+
+# =============================================================================
+# GRADE THRESHOLDS
+# =============================================================================
+grade_thresholds:
+  Exceptional: 90
+  Strong: 75
+  Moderate: 60
+  Weak: 40
+  Critical: 0
+
+# Grade descriptions for UI
+grade_descriptions:
+  Exceptional: "Strong investment signals across all dimensions"
+  Strong: "Clear potential with minor areas for improvement"
+  Moderate: "Solid foundation but needs refinement in key areas"
+  Weak: "Significant concerns that need addressing"
+  Critical: "Fundamental issues present - pivot may be needed"

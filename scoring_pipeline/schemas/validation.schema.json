@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ValidationResult",
+  "description": "Schema for Layer 2 validation output",
+  "type": "object",
+  "required": ["validation_status", "checks_performed", "is_valid_for_scoring", "validator_version"],
+  "properties": {
+    "validation_status": {
+      "type": "string",
+      "enum": ["passed", "failed", "warnings"]
+    },
+    "checks_performed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check_name", "status"],
+        "properties": {
+          "check_name": {
+            "type": "string",
+            "description": "Name of the validation check"
+          },
+          "check_type": {
+            "type": "string",
+            "enum": ["schema", "enum", "compatibility", "length", "duplicate", "format"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pass", "fail", "warn", "skip"]
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable result message"
+          },
+          "field_affected": {
+            "type": ["string", "null"],
+            "description": "Which field triggered this check result"
+          },
+          "expected": {
+            "description": "Expected value or constraint"
+          },
+          "actual": {
+            "description": "Actual value found"
+          }
+        }
+      }
+    },
+    "is_valid_for_scoring": {
+      "type": "boolean",
+      "description": "Whether data can proceed to scoring layer"
+    },
+    "validation_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "validator_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of validator"
+    },
+    "warnings_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "errors_count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}
